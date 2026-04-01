@@ -37,7 +37,7 @@ Deliver a Cloudflare-based temporary mailbox control plane with a compact, tool-
 
 ## Visual Evidence
 
-Evidence is bound to local `HEAD` `845be4fe9e382e4d3af7f05bca2b826d3c00ccd8`.
+Evidence reflects implementation commit `845be4fe9e382e4d3af7f05bca2b826d3c00ccd8` and is persisted with this spec.
 
 ### Login
 
