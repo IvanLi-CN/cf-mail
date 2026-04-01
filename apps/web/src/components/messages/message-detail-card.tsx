@@ -24,8 +24,8 @@ const buildHtmlPreviewDocument = (html: string) => `<!doctype html>
       body {
         margin: 0;
         min-height: 100%;
-        background: #ffffff;
-        color: #111827;
+        background: #eef3f8;
+        color: #0f172a;
       }
 
       body {
@@ -122,7 +122,7 @@ export const MessageDetailCard = ({
               HTML 正文
             </p>
             <iframe
-              className="h-[420px] w-full rounded-xl border border-border bg-white"
+              className="h-[420px] w-full rounded-xl border border-border bg-[#eef3f8]"
               sandbox=""
               srcDoc={buildHtmlPreviewDocument(message.html)}
               title={`HTML preview for ${message.subject}`}

@@ -25,7 +25,7 @@ describe("MessageDetailCard", () => {
     expect(htmlPreview).toBeInTheDocument();
     expect(htmlPreview).toHaveAttribute(
       "srcdoc",
-      expect.stringContaining("#ffffff"),
+      expect.stringContaining("#eef3f8"),
     );
     expect(screen.getByRole("link", { name: "下载 Raw EML" })).toHaveAttribute(
       "href",
