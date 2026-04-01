@@ -93,6 +93,7 @@ The Worker expects these bindings and variables:
 
 - `APP_ENV`
 - `MAIL_DOMAIN`
+- `EMAIL_WORKER_NAME` (required when live Email Routing management is enabled)
 - `DEFAULT_MAILBOX_TTL_MINUTES`
 - `CLEANUP_BATCH_SIZE`
 - `EMAIL_ROUTING_MANAGEMENT_ENABLED`
@@ -159,9 +160,10 @@ To use the deploy workflow, configure:
 1. Create the Pages project `cf-mail` once in Cloudflare
 2. Bind `cfm.707979.xyz` to Pages
 3. Set Worker secrets (`SESSION_SECRET`, `BOOTSTRAP_ADMIN_API_KEY`, `CLOUDFLARE_API_TOKEN`)
-4. Set GitHub secret `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`
-5. Set GitHub vars `CF_PAGES_PROJECT_NAME=cf-mail` and `VITE_API_BASE_URL=https://api.cfm.707979.xyz`
-6. Push to `main` to trigger the deploy workflow
+4. Set `EMAIL_WORKER_NAME` to the Email Worker script that should receive routed mail (for `707979.xyz`, this is `email-receiver-worker`)
+5. Set GitHub secret `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`
+6. Set GitHub vars `CF_PAGES_PROJECT_NAME=cf-mail` and `VITE_API_BASE_URL=https://api.cfm.707979.xyz`
+7. Push to `main` to trigger the deploy workflow
 
 ## Domain topology example
 

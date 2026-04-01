@@ -18,6 +18,14 @@ const ensureManagementEnabled = (config: RuntimeConfig) => {
   return true;
 };
 
+const requireEmailWorkerName = (config: RuntimeConfig) => {
+  if (config.EMAIL_WORKER_NAME) return config.EMAIL_WORKER_NAME;
+  throw new ApiError(
+    500,
+    "Email Routing management is enabled but EMAIL_WORKER_NAME is not configured",
+  );
+};
+
 const cfRequest = async <T>(
   config: RuntimeConfig,
   path: string,
@@ -62,6 +70,7 @@ export const createRoutingRule = async (
   address: string,
 ) => {
   if (!ensureManagementEnabled(config)) return null;
+  const workerName = requireEmailWorkerName(config);
   const result = await cfRequest<{ id: string }>(
     config,
     `/zones/${config.CLOUDFLARE_ZONE_ID}/email/routing/rules`,
@@ -71,7 +80,7 @@ export const createRoutingRule = async (
         name: `Mailbox ${address}`,
         enabled: true,
         matchers: [{ field: "to", type: "literal", value: address }],
-        actions: [{ type: "worker" }],
+        actions: [{ type: "worker", value: [workerName] }],
       }),
     },
   );

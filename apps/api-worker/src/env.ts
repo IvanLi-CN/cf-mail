@@ -3,6 +3,7 @@ import { z } from "zod";
 const runtimeConfigSchema = z.object({
   APP_ENV: z.string().default("development"),
   MAIL_DOMAIN: z.string().min(1),
+  EMAIL_WORKER_NAME: z.string().min(1).optional(),
   DEFAULT_MAILBOX_TTL_MINUTES: z.coerce.number().int().min(5).default(60),
   CLEANUP_BATCH_SIZE: z.coerce.number().int().min(1).max(20).default(3),
   EMAIL_ROUTING_MANAGEMENT_ENABLED: z.coerce.boolean().default(false),
@@ -22,6 +23,7 @@ export interface WorkerEnv {
   MAIL_BUCKET: R2Bucket;
   APP_ENV: string;
   MAIL_DOMAIN: string;
+  EMAIL_WORKER_NAME?: string;
   DEFAULT_MAILBOX_TTL_MINUTES: string;
   CLEANUP_BATCH_SIZE: string;
   EMAIL_ROUTING_MANAGEMENT_ENABLED: string;
