@@ -21,13 +21,15 @@ const requestJson = async <T>(
   init: RequestInit,
   parser: (value: unknown) => T,
 ) => {
+  const headers = new Headers(init.headers ?? undefined);
+  if (init.body && !headers.has("content-type")) {
+    headers.set("content-type", "application/json");
+  }
+
   const response = await fetch(`${API_BASE}${path}`, {
     credentials: "include",
-    headers: {
-      "content-type": "application/json",
-      ...(init.headers ?? {}),
-    },
     ...init,
+    headers,
   });
   if (response.status === 204) return parser({});
   const payload = await response.json();

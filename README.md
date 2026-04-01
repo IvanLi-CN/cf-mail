@@ -99,6 +99,7 @@ The Worker expects these bindings and variables:
 - `BOOTSTRAP_ADMIN_EMAIL`
 - `BOOTSTRAP_ADMIN_NAME`
 - `CF_ROUTE_RULESET_TAG`
+- `WEB_APP_ORIGIN` (optional override for the Pages origin)
 
 If `EMAIL_ROUTING_MANAGEMENT_ENABLED=false`, the app still runs in demo/local mode without mutating live Email Routing resources.
 

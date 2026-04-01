@@ -14,6 +14,7 @@ const runtimeConfigSchema = z.object({
   BOOTSTRAP_ADMIN_API_KEY: z.string().min(16).optional(),
   SESSION_SECRET: z.string().min(16),
   CF_ROUTE_RULESET_TAG: z.string().default("cf-mail"),
+  WEB_APP_ORIGIN: z.string().url().optional(),
 });
 
 export interface WorkerEnv {
@@ -32,6 +33,7 @@ export interface WorkerEnv {
   BOOTSTRAP_ADMIN_API_KEY?: string;
   SESSION_SECRET: string;
   CF_ROUTE_RULESET_TAG?: string;
+  WEB_APP_ORIGIN?: string;
 }
 
 export type RuntimeConfig = z.infer<typeof runtimeConfigSchema>;
