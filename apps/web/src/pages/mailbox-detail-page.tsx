@@ -52,34 +52,36 @@ export const MailboxDetailPage = () => {
         }
       />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>邮箱信息</CardTitle>
-          <CardDescription>
-            这里展示当前邮箱本身的生命周期与 Cloudflare 规则 ID。
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <MailboxList mailboxes={[mailboxQuery.data]} />
-        </CardContent>
-      </Card>
+      <div className="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
+        <Card className="h-fit">
+          <CardHeader>
+            <CardTitle>邮箱信息</CardTitle>
+            <CardDescription>
+              生命周期、状态和 Cloudflare 规则 ID。
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <MailboxList mailboxes={[mailboxQuery.data]} />
+          </CardContent>
+        </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>该邮箱的邮件</CardTitle>
-          <CardDescription>列表已经按当前邮箱地址过滤。</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {messagesQuery.data && messagesQuery.data.length > 0 ? (
-            <MessageList messages={messagesQuery.data} />
-          ) : (
-            <EmptyState
-              title="这个邮箱还没有邮件"
-              description="你可以把它提供给测试或自动化流程。"
-            />
-          )}
-        </CardContent>
-      </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>该邮箱的邮件</CardTitle>
+            <CardDescription>列表已经按当前邮箱地址过滤。</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {messagesQuery.data && messagesQuery.data.length > 0 ? (
+              <MessageList messages={messagesQuery.data} />
+            ) : (
+              <EmptyState
+                title="这个邮箱还没有邮件"
+                description="你可以把它提供给测试或自动化流程。"
+              />
+            )}
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

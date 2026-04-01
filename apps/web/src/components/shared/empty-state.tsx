@@ -17,7 +17,7 @@ export const EmptyState = ({
   description: string;
   action?: ReactNode;
 }) => (
-  <Card className="border-dashed bg-card/60">
+  <Card className="border-dashed bg-muted/20">
     <CardHeader>
       <CardTitle>{title}</CardTitle>
       <CardDescription>{description}</CardDescription>

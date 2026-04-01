@@ -19,9 +19,14 @@ describe("MessageDetailCard", () => {
       screen.getByRole("heading", { name: message.subject }),
     ).toBeInTheDocument();
     expect(screen.getByText("bundle.zip")).toBeInTheDocument();
-    expect(
-      screen.getByTitle(`HTML preview for ${message.subject}`),
-    ).toBeInTheDocument();
+    const htmlPreview = screen.getByTitle(
+      `HTML preview for ${message.subject}`,
+    );
+    expect(htmlPreview).toBeInTheDocument();
+    expect(htmlPreview).toHaveAttribute(
+      "srcdoc",
+      expect.stringContaining("#ffffff"),
+    );
     expect(screen.getByRole("link", { name: "下载 Raw EML" })).toHaveAttribute(
       "href",
       message.rawDownloadPath,

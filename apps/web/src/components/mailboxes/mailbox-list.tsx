@@ -13,9 +13,9 @@ import type { Mailbox } from "@/lib/contracts";
 import { formatDateTime, formatRelativeMinutes } from "@/lib/format";
 
 const statusClassMap: Record<Mailbox["status"], string> = {
-  active: "bg-success/20 text-success-foreground",
-  destroying: "bg-primary/15 text-primary",
-  destroyed: "bg-secondary text-secondary-foreground",
+  active: "border-success/30 bg-success/15 text-success-foreground",
+  destroying: "border-primary/30 bg-primary/15 text-primary",
+  destroyed: "border-border bg-secondary text-secondary-foreground",
 };
 
 export const MailboxList = ({
@@ -41,12 +41,12 @@ export const MailboxList = ({
           <TableCell>
             <div className="space-y-1">
               <Link
-                className="font-medium text-foreground hover:text-primary"
+                className="font-medium text-foreground transition-colors hover:text-primary"
                 to={`/mailboxes/${mailbox.id}`}
               >
                 {mailbox.address}
               </Link>
-              <p className="text-xs text-muted-foreground">
+              <p className="font-mono text-xs text-muted-foreground">
                 Rule: {mailbox.routingRuleId ?? "已清理"}
               </p>
             </div>

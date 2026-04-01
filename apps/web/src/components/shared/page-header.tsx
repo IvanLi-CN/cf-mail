@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 export const PageHeader = ({
@@ -18,19 +17,21 @@ export const PageHeader = ({
 }) => (
   <div
     className={cn(
-      "flex flex-col gap-4 md:flex-row md:items-end md:justify-between",
+      "flex flex-col gap-4 border-b border-border pb-4 md:flex-row md:items-end md:justify-between",
       className,
     )}
   >
-    <div className="space-y-3">
+    <div className="space-y-2">
       {eyebrow ? (
-        <Badge className="bg-primary/15 text-primary">{eyebrow}</Badge>
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          {eyebrow}
+        </p>
       ) : null}
-      <div className="space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight text-foreground">
+      <div className="space-y-1">
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
           {title}
         </h1>
-        <p className="max-w-2xl text-sm leading-6 text-muted-foreground">
+        <p className="max-w-3xl text-sm leading-6 text-muted-foreground">
           {description}
         </p>
       </div>

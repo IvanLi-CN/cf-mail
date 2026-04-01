@@ -8,7 +8,7 @@ export const Card = ({
 }: HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "rounded-[28px] border border-border/70 bg-card/80 p-6 shadow-soft backdrop-blur",
+      "rounded-2xl border border-border bg-card p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]",
       className,
     )}
     {...props}
@@ -19,7 +19,7 @@ export const CardHeader = ({
   className,
   ...props
 }: HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("mb-6 flex flex-col gap-2", className)} {...props} />
+  <div className={cn("mb-5 flex flex-col gap-1.5", className)} {...props} />
 );
 
 export const CardTitle = ({
@@ -27,7 +27,7 @@ export const CardTitle = ({
   ...props
 }: HTMLAttributes<HTMLHeadingElement>) => (
   <h2
-    className={cn("text-xl font-semibold tracking-tight", className)}
+    className={cn("text-lg font-semibold tracking-tight", className)}
     {...props}
   />
 );
@@ -36,7 +36,10 @@ export const CardDescription = ({
   className,
   ...props
 }: HTMLAttributes<HTMLParagraphElement>) => (
-  <p className={cn("text-sm text-muted-foreground", className)} {...props} />
+  <p
+    className={cn("text-sm leading-6 text-muted-foreground", className)}
+    {...props}
+  />
 );
 
 export const CardContent = ({

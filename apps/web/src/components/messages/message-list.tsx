@@ -28,12 +28,12 @@ export const MessageList = ({ messages }: { messages: MessageSummary[] }) => (
           <TableCell>
             <div className="space-y-1">
               <Link
-                className="font-medium text-foreground hover:text-primary"
+                className="font-medium text-foreground transition-colors hover:text-primary"
                 to={`/messages/${message.id}`}
               >
                 {message.subject}
               </Link>
-              <p className="max-w-md text-xs text-muted-foreground">
+              <p className="max-w-xl truncate text-xs text-muted-foreground">
                 {message.previewText}
               </p>
             </div>
@@ -48,10 +48,14 @@ export const MessageList = ({ messages }: { messages: MessageSummary[] }) => (
           </TableCell>
           <TableCell>
             <div className="space-y-1">
-              <p>{message.mailboxAddress}</p>
-              <div className="flex gap-2 text-xs">
+              <p className="font-mono text-xs text-foreground md:text-sm">
+                {message.mailboxAddress}
+              </p>
+              <div className="flex flex-wrap gap-2 text-xs">
                 {message.hasHtml ? (
-                  <Badge className="bg-primary/15 text-primary">HTML</Badge>
+                  <Badge className="border-primary/30 bg-primary/15 text-primary">
+                    HTML
+                  </Badge>
                 ) : null}
                 {message.attachmentCount > 0 ? (
                   <Badge>{message.attachmentCount} 附件</Badge>

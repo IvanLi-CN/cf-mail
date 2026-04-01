@@ -11,7 +11,7 @@ export const Table = ({
   className,
   ...props
 }: TableHTMLAttributes<HTMLTableElement>) => (
-  <div className="overflow-hidden rounded-3xl border border-border/70">
+  <div className="overflow-x-auto rounded-xl border border-border bg-card">
     <table
       className={cn("min-w-full border-collapse text-left text-sm", className)}
       {...props}
@@ -23,14 +23,14 @@ export const TableHead = ({
   className,
   ...props
 }: HTMLAttributes<HTMLTableSectionElement>) => (
-  <thead className={cn("bg-white/5", className)} {...props} />
+  <thead className={cn("bg-muted/40", className)} {...props} />
 );
 
 export const TableBody = ({
   className,
   ...props
 }: HTMLAttributes<HTMLTableSectionElement>) => (
-  <tbody className={cn("divide-y divide-border/70", className)} {...props} />
+  <tbody className={cn("divide-y divide-border", className)} {...props} />
 );
 
 export const TableRow = ({
@@ -49,7 +49,7 @@ export const TableHeaderCell = ({
 }: ThHTMLAttributes<HTMLTableCellElement>) => (
   <th
     className={cn(
-      "px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground",
+      "px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground",
       className,
     )}
     {...props}
@@ -60,5 +60,5 @@ export const TableCell = ({
   className,
   ...props
 }: TdHTMLAttributes<HTMLTableCellElement>) => (
-  <td className={cn("px-4 py-4 align-top", className)} {...props} />
+  <td className={cn("px-4 py-3.5 align-top", className)} {...props} />
 );

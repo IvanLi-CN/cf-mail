@@ -45,7 +45,7 @@ export const UserTable = ({
   });
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[0.8fr_1.2fr]">
+    <div className="grid gap-6 2xl:grid-cols-[320px_minmax(0,1fr)]">
       <Card>
         <CardHeader>
           <CardTitle>创建用户</CardTitle>
@@ -78,7 +78,7 @@ export const UserTable = ({
               <Label htmlFor="user-role">角色</Label>
               <select
                 id="user-role"
-                className="flex h-11 w-full rounded-2xl border border-input bg-background/60 px-4 text-sm outline-none"
+                className="flex h-10 w-full rounded-lg border border-input bg-muted/40 px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                 {...form.register("role")}
               >
                 <option value="member">member</option>
@@ -90,8 +90,10 @@ export const UserTable = ({
             </Button>
           </form>
           {latestKey ? (
-            <div className="rounded-[24px] border border-primary/40 bg-primary/10 p-4 text-sm">
-              <p className="font-medium text-primary">初始 API Key</p>
+            <div className="rounded-xl border border-primary/40 bg-primary/10 p-4 text-sm">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+                初始 API Key
+              </p>
               <p className="mt-2 break-all text-foreground">{latestKey}</p>
             </div>
           ) : null}

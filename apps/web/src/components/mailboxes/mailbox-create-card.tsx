@@ -50,12 +50,12 @@ export const MailboxCreateCard = ({
       <CardHeader>
         <CardTitle>创建邮箱</CardTitle>
         <CardDescription>
-          可以随机生成，也可以指定用户名与子域。默认一小时后自动销毁。
+          随机或指定用户名 / 子域。默认 60 分钟后自动回收。
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form
-          className="grid gap-4 md:grid-cols-2"
+          className="grid gap-4"
           onSubmit={form.handleSubmit((values) =>
             onSubmit({
               localPart: values.localPart || undefined,
@@ -64,34 +64,40 @@ export const MailboxCreateCard = ({
             }),
           )}
         >
-          <div className="space-y-2">
-            <Label htmlFor="localPart">用户名</Label>
-            <Input
-              id="localPart"
-              placeholder="留空则随机"
-              {...form.register("localPart")}
-            />
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="localPart">用户名</Label>
+              <Input
+                id="localPart"
+                placeholder="留空则随机"
+                {...form.register("localPart")}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="subdomain">子域名</Label>
+              <Input
+                id="subdomain"
+                placeholder="留空则随机"
+                {...form.register("subdomain")}
+              />
+            </div>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="subdomain">子域名</Label>
-            <Input
-              id="subdomain"
-              placeholder="留空则随机"
-              {...form.register("subdomain")}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="ttl">生命周期（分钟）</Label>
-            <Input
-              id="ttl"
-              type="number"
-              min={5}
-              max={1440}
-              {...form.register("expiresInMinutes", { valueAsNumber: true })}
-            />
-          </div>
-          <div className="flex items-end">
-            <Button className="w-full" type="submit" disabled={isPending}>
+          <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
+            <div className="space-y-2">
+              <Label htmlFor="ttl">生命周期（分钟）</Label>
+              <Input
+                id="ttl"
+                type="number"
+                min={5}
+                max={1440}
+                {...form.register("expiresInMinutes", { valueAsNumber: true })}
+              />
+            </div>
+            <Button
+              className="w-full md:w-auto"
+              type="submit"
+              disabled={isPending}
+            >
               {isPending ? "创建中…" : "创建邮箱"}
             </Button>
           </div>

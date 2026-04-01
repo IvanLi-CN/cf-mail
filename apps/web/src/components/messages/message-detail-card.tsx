@@ -10,6 +10,41 @@ import {
 import type { MessageDetail } from "@/lib/contracts";
 import { formatBytes, formatDateTime } from "@/lib/format";
 
+const buildHtmlPreviewDocument = (html: string) => `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        color-scheme: light;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: #ffffff;
+        color: #111827;
+      }
+
+      body {
+        padding: 24px;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+      }
+
+      img,
+      video,
+      iframe {
+        max-width: 100%;
+      }
+    </style>
+  </head>
+  <body>${html}</body>
+</html>`;
+
 const RecipientList = ({
   title,
   items,
@@ -43,11 +78,11 @@ export const MessageDetailCard = ({
   message: MessageDetail;
   rawUrl: string;
 }) => (
-  <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+  <div className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_360px]">
     <Card className="space-y-6">
       <CardHeader>
         <div className="flex flex-wrap items-center gap-2">
-          <Badge className="bg-primary/15 text-primary">
+          <Badge className="border-primary/30 bg-primary/15 text-primary">
             {message.mailboxAddress}
           </Badge>
           {message.attachmentCount > 0 ? (
@@ -58,7 +93,7 @@ export const MessageDetailCard = ({
         <CardDescription>{message.previewText}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="grid gap-4 rounded-[24px] border border-border/70 bg-background/30 p-5 md:grid-cols-2">
+        <div className="grid gap-4 rounded-xl border border-border bg-muted/30 p-4 md:grid-cols-2">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
               From
@@ -87,9 +122,9 @@ export const MessageDetailCard = ({
               HTML 正文
             </p>
             <iframe
-              className="h-[420px] w-full rounded-[24px] border border-border/70 bg-background/30"
+              className="h-[420px] w-full rounded-xl border border-border bg-white"
               sandbox=""
-              srcDoc={message.html}
+              srcDoc={buildHtmlPreviewDocument(message.html)}
               title={`HTML preview for ${message.subject}`}
             />
           </div>
@@ -100,7 +135,7 @@ export const MessageDetailCard = ({
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
               纯文本正文
             </p>
-            <pre className="overflow-auto rounded-[24px] border border-border/70 bg-background/30 p-5 text-sm whitespace-pre-wrap text-foreground">
+            <pre className="overflow-auto rounded-xl border border-border bg-muted/30 p-4 text-sm whitespace-pre-wrap text-foreground">
               {message.text}
             </pre>
           </div>
@@ -122,7 +157,7 @@ export const MessageDetailCard = ({
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
               Headers
             </p>
-            <div className="space-y-2 rounded-[24px] border border-border/70 bg-background/30 p-4 text-sm">
+            <div className="space-y-2 rounded-xl border border-border bg-muted/30 p-4 text-sm">
               {message.headers.map((header) => (
                 <div
                   key={`${header.key}-${header.value}`}
@@ -145,7 +180,7 @@ export const MessageDetailCard = ({
                 message.attachments.map((attachment) => (
                   <div
                     key={attachment.id}
-                    className="rounded-2xl border border-border/70 bg-background/30 p-4 text-sm"
+                    className="rounded-lg border border-border bg-muted/30 p-4 text-sm"
                   >
                     <p className="font-medium text-foreground">
                       {attachment.filename ?? "unnamed"}

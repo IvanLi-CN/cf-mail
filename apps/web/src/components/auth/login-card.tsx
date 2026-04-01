@@ -34,12 +34,14 @@ export const LoginCard = ({
   });
 
   return (
-    <Card className="mx-auto w-full max-w-lg bg-card/80 p-8">
+    <Card className="mx-auto w-full max-w-lg p-6">
       <CardHeader>
-        <CardTitle className="text-3xl">登录 cf-mail</CardTitle>
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          Sign in
+        </p>
+        <CardTitle className="text-2xl">登录 cf-mail</CardTitle>
         <CardDescription>
-          使用 API Key 登录控制台。浏览器会换成 HttpOnly session
-          cookie，心羽已经替你想好了。
+          使用 API Key 登录控制台。浏览器端会换成 HttpOnly session cookie。
         </CardDescription>
       </CardHeader>
       <CardContent>

@@ -14,7 +14,21 @@ export const LoginPage = () => {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 py-10">
+    <div className="mx-auto grid min-h-screen max-w-[1180px] items-center gap-10 px-4 py-10 lg:grid-cols-[minmax(0,1fr)_480px]">
+      <div className="space-y-5">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          Control plane
+        </p>
+        <div className="space-y-3">
+          <h1 className="text-4xl font-semibold tracking-tight text-foreground">
+            Cloudflare 临时邮箱控制台
+          </h1>
+          <p className="max-w-xl text-sm leading-7 text-muted-foreground">
+            面向工具使用场景设计：创建临时邮箱、收件解析、查看
+            HTML/文本/附件详情，并按 TTL 自动销毁。
+          </p>
+        </div>
+      </div>
       <LoginCard
         error={error}
         isPending={loginMutation.isPending}

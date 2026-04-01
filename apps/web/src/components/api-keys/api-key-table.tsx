@@ -48,7 +48,7 @@ export const ApiKeyTable = ({
   });
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[0.8fr_1.2fr]">
+    <div className="grid gap-6 2xl:grid-cols-[320px_minmax(0,1fr)]">
       <Card>
         <CardHeader>
           <CardTitle>创建 API Key</CardTitle>
@@ -82,8 +82,10 @@ export const ApiKeyTable = ({
             </Button>
           </form>
           {latestSecret ? (
-            <div className="rounded-[24px] border border-primary/40 bg-primary/10 p-4 text-sm">
-              <p className="font-medium text-primary">仅展示一次</p>
+            <div className="rounded-xl border border-primary/40 bg-primary/10 p-4 text-sm">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+                仅展示一次
+              </p>
               <p className="mt-2 break-all text-foreground">{latestSecret}</p>
             </div>
           ) : null}

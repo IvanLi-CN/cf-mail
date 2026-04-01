@@ -52,56 +52,76 @@ export const MailboxesPage = () => {
         description="创建随机或指定邮箱、查看最近收件，并且按 TTL 自动回收所有邮件数据。"
         eyebrow="Mailboxes"
       />
-      <StatGrid stats={stats} />
-      <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
-        <MailboxCreateCard
-          onSubmit={async (values) => {
-            await createMailboxMutation.mutateAsync(values);
-          }}
-          isPending={createMailboxMutation.isPending}
-        />
-        <Card>
-          <CardHeader>
-            <CardTitle>最近收件</CardTitle>
-            <CardDescription>
-              支持跳转到详情查看 HTML、纯文本、附件清单与 raw eml。
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {messagesQuery.data && messagesQuery.data.length > 0 ? (
-              <MessageList messages={messagesQuery.data.slice(0, 5)} />
-            ) : (
-              <EmptyState
-                title="还没有邮件"
-                description="先创建一个邮箱，再把邮件投过来看看效果。"
-              />
-            )}
-          </CardContent>
-        </Card>
+      <div className="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_340px]">
+        <div className="space-y-6">
+          <StatGrid stats={stats} />
+          <Card>
+            <CardHeader>
+              <CardTitle>邮箱列表</CardTitle>
+              <CardDescription>
+                主列表优先展示活跃地址；销毁时会同步清理 Cloudflare
+                规则、消息索引和 R2 对象。
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {mailboxesQuery.data && mailboxesQuery.data.length > 0 ? (
+                <MailboxList
+                  mailboxes={mailboxesQuery.data}
+                  onDestroy={(mailboxId) =>
+                    destroyMailboxMutation.mutate(mailboxId)
+                  }
+                />
+              ) : (
+                <EmptyState
+                  title="暂无邮箱"
+                  description="先在右侧创建一个临时邮箱。"
+                />
+              )}
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>最近收件</CardTitle>
+              <CardDescription>
+                支持跳转到详情查看 HTML、纯文本、附件清单与 raw eml。
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {messagesQuery.data && messagesQuery.data.length > 0 ? (
+                <MessageList messages={messagesQuery.data.slice(0, 8)} />
+              ) : (
+                <EmptyState
+                  title="还没有邮件"
+                  description="创建邮箱之后，就可以开始看收件和详情解析。"
+                />
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="space-y-6">
+          <MailboxCreateCard
+            onSubmit={async (values) => {
+              await createMailboxMutation.mutateAsync(values);
+            }}
+            isPending={createMailboxMutation.isPending}
+          />
+          <Card>
+            <CardHeader>
+              <CardTitle>工作方式</CardTitle>
+              <CardDescription>
+                这是偏工具型的控制台：先创建、再观察收件、最后按 TTL
+                或手动销毁。
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm text-muted-foreground">
+              <p>• 随机地址和指定地址都支持。</p>
+              <p>• 单邮箱详情会自动筛选该地址的邮件。</p>
+              <p>• HTML、纯文本、附件清单和 Raw EML 都在详情页。</p>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>邮箱列表</CardTitle>
-          <CardDescription>
-            销毁邮箱时会同步清理 Cloudflare 规则、消息索引和 R2 对象。
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {mailboxesQuery.data && mailboxesQuery.data.length > 0 ? (
-            <MailboxList
-              mailboxes={mailboxesQuery.data}
-              onDestroy={(mailboxId) =>
-                destroyMailboxMutation.mutate(mailboxId)
-              }
-            />
-          ) : (
-            <EmptyState
-              title="暂无邮箱"
-              description="点击左侧卡片创建第一个临时邮箱。"
-            />
-          )}
-        </CardContent>
-      </Card>
     </div>
   );
 };
