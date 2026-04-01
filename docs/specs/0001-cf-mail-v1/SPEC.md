@@ -33,11 +33,11 @@ Deliver a Cloudflare-based temporary mailbox control plane with a compact, tool-
 - Dense information layout optimized for repeated operational tasks
 - Sidebar navigation with persistent page context
 - Table-first data presentation with compact actions
-- White background for embedded HTML mail preview to preserve message fidelity
+- Cool gray embedded HTML mail preview surface to reduce glare while preserving message fidelity
 
 ## Visual Evidence
 
-Evidence is bound to local `HEAD` `27573cd86c6fab4b221387d39a7671d489b65ce5`.
+Evidence is bound to local `HEAD` `845be4fe9e382e4d3af7f05bca2b826d3c00ccd8`.
 
 ### Login
 
