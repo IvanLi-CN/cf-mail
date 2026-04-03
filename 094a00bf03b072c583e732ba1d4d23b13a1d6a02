@@ -1,0 +1,21 @@
+{
+  "app_effective_version": "0.3.2",
+  "base_stable_version": "0.3.1",
+  "channel_label": "channel:stable",
+  "created_at": "2026-04-03T16:06:07Z",
+  "next_stable_version": "0.3.2",
+  "notes_ref": "refs/notes/release-snapshots",
+  "pr_head_sha": "ca621ad36cee9de6c633559d6c68b4b6d9a9a820",
+  "pr_number": 7,
+  "pr_title": "fix: dispatch deploy after release publish",
+  "release_bump": "patch",
+  "release_channel": "stable",
+  "release_enabled": true,
+  "release_prerelease": false,
+  "release_tag": "v0.3.2",
+  "schema_version": 1,
+  "snapshot_source": "ci-main",
+  "tags_csv": "v0.3.2",
+  "target_sha": "094a00bf03b072c583e732ba1d4d23b13a1d6a02",
+  "type_label": "type:patch"
+}
