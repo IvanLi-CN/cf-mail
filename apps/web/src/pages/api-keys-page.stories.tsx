@@ -1,0 +1,128 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
+
+import { AppShell } from "@/components/layout/app-shell";
+import { appRoutes } from "@/lib/routes";
+import { demoApiKeys, demoSessionUser, demoVersion } from "@/mocks/data";
+import { ApiKeysDocsPage } from "@/pages/api-keys-docs-page";
+import { ApiKeysPageView } from "@/pages/api-keys-page";
+
+const PathnameBadge = () => {
+  const location = useLocation();
+
+  return (
+    <div className="mb-4 flex justify-end">
+      <span className="rounded-md border border-border bg-secondary px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-secondary-foreground">
+        Path · {location.pathname}
+      </span>
+    </div>
+  );
+};
+
+const RouteFlowHarness = ({
+  latestSecret = null,
+}: {
+  latestSecret?: string | null;
+}) => (
+  <AppShell user={demoSessionUser} version={demoVersion} onLogout={fn()}>
+    <div className="space-y-4">
+      <PathnameBadge />
+      <Routes>
+        <Route path="/" element={<Navigate to={appRoutes.apiKeys} replace />} />
+        <Route
+          path={appRoutes.apiKeys}
+          element={
+            <ApiKeysPageView
+              apiKeys={demoApiKeys}
+              latestSecret={latestSecret}
+              onCreate={fn()}
+              onRevoke={fn()}
+            />
+          }
+        />
+        <Route path={appRoutes.apiKeysDocs} element={<ApiKeysDocsPage />} />
+      </Routes>
+    </div>
+  </AppShell>
+);
+
+const meta = {
+  title: "Pages/Api Keys",
+  component: ApiKeysPageView,
+  tags: ["autodocs"],
+  args: {
+    apiKeys: demoApiKeys,
+    latestSecret: null,
+    onCreate: fn(),
+    onRevoke: fn(),
+  },
+} satisfies Meta<typeof ApiKeysPageView>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Overview: Story = {};
+
+export const WithLatestSecret: Story = {
+  args: {
+    latestSecret: "cfm_full_secret_returned_once",
+  },
+};
+
+export const RouteFlow: Story = {
+  render: () => <RouteFlowHarness />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(
+      canvas.getByRole("heading", { name: "API Keys", level: 1 }),
+    ).toBeInTheDocument();
+    await expect(canvas.getByText(/Path · \/api-keys/i)).toBeInTheDocument();
+    await expect(canvas.getByRole("link", { name: "API Keys" })).toHaveClass(
+      /bg-secondary/,
+    );
+
+    await userEvent.click(canvas.getByRole("link", { name: "对接文档" }));
+
+    await waitFor(async () => {
+      await expect(
+        canvas.getByRole("heading", { name: "API 对接文档", level: 1 }),
+      ).toBeInTheDocument();
+    });
+    await expect(
+      canvas.getByText(/Path · \/api-keys\/docs/i),
+    ).toBeInTheDocument();
+    await expect(canvas.getByText("API Key Lifecycle")).toBeInTheDocument();
+    await expect(canvas.getByRole("link", { name: "API Keys" })).toHaveClass(
+      /bg-secondary/,
+    );
+
+    await userEvent.click(canvas.getByRole("link", { name: "回到 API Keys" }));
+
+    await waitFor(async () => {
+      await expect(
+        canvas.getByRole("heading", { name: "API Keys", level: 1 }),
+      ).toBeInTheDocument();
+    });
+    await expect(canvas.getByText(/Path · \/api-keys/i)).toBeInTheDocument();
+  },
+};
+
+export const DocsReference: Story = {
+  render: () => (
+    <RouteFlowHarness latestSecret="cfm_full_secret_returned_once" />
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("link", { name: "对接文档" }));
+    await waitFor(async () => {
+      await expect(
+        canvas.getByRole("heading", { name: "API 对接文档", level: 1 }),
+      ).toBeInTheDocument();
+    });
+    await expect(canvas.getByText("Automation / Agent")).toBeInTheDocument();
+    await expect(canvas.getByText("/api/messages/:id/raw")).toBeInTheDocument();
+  },
+};
