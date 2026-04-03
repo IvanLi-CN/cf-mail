@@ -1,0 +1,21 @@
+{
+  "app_effective_version": "0.5.0",
+  "base_stable_version": "0.4.0",
+  "channel_label": "channel:stable",
+  "created_at": "2026-04-03T19:23:34Z",
+  "next_stable_version": "0.5.0",
+  "notes_ref": "refs/notes/release-snapshots",
+  "pr_head_sha": "30856b501941902abedc698f6c7be16f7c02bc79",
+  "pr_number": 8,
+  "pr_title": "feat: add Cloudflare domain catalog",
+  "release_bump": "minor",
+  "release_channel": "stable",
+  "release_enabled": true,
+  "release_prerelease": false,
+  "release_tag": "v0.5.0",
+  "schema_version": 1,
+  "snapshot_source": "ci-main",
+  "tags_csv": "v0.5.0",
+  "target_sha": "1637f00b1fc38c4f122ca31be262dac1d32d75fc",
+  "type_label": "type:minor"
+}
