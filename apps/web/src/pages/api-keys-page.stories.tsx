@@ -4,8 +4,13 @@ import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 
 import { AppShell } from "@/components/layout/app-shell";
 import { appRoutes } from "@/lib/routes";
-import { demoApiKeys, demoSessionUser, demoVersion } from "@/mocks/data";
-import { ApiKeysDocsPage } from "@/pages/api-keys-docs-page";
+import {
+  demoApiKeys,
+  demoMeta,
+  demoSessionUser,
+  demoVersion,
+} from "@/mocks/data";
+import { ApiKeysDocsPageView } from "@/pages/api-keys-docs-page";
 import { ApiKeysPageView } from "@/pages/api-keys-page";
 
 const PathnameBadge = () => {
@@ -41,7 +46,10 @@ const RouteFlowHarness = ({
             />
           }
         />
-        <Route path={appRoutes.apiKeysDocs} element={<ApiKeysDocsPage />} />
+        <Route
+          path={appRoutes.apiKeysDocs}
+          element={<ApiKeysDocsPageView meta={demoMeta} />}
+        />
       </Routes>
     </div>
   </AppShell>
@@ -123,6 +131,8 @@ export const DocsReference: Story = {
       ).toBeInTheDocument();
     });
     await expect(canvas.getByText("Automation / Agent")).toBeInTheDocument();
+    await expect(canvas.getByText("/api/meta")).toBeInTheDocument();
+    await expect(canvas.getByText("/api/mailboxes/ensure")).toBeInTheDocument();
     await expect(canvas.getByText("/api/messages/:id/raw")).toBeInTheDocument();
   },
 };
