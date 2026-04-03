@@ -10,6 +10,7 @@ import {
   useCreateApiKeyMutation,
   useRevokeApiKeyMutation,
 } from "@/hooks/use-api-keys";
+import { useSessionQuery } from "@/hooks/use-session";
 import { appRoutes, latestApiKeySecretStorageKey } from "@/lib/routes";
 
 type ApiKeysPageViewProps = {
@@ -50,25 +51,56 @@ export const ApiKeysPageView = ({
   );
 };
 
+const readStoredLatestSecret = (currentUserId?: string) => {
+  if (typeof window === "undefined" || !currentUserId) return null;
+
+  const rawValue = window.sessionStorage.getItem(latestApiKeySecretStorageKey);
+  if (!rawValue) return null;
+
+  try {
+    const parsed = JSON.parse(rawValue) as {
+      secret?: unknown;
+      userId?: unknown;
+    };
+    if (
+      typeof parsed.secret === "string" &&
+      typeof parsed.userId === "string" &&
+      parsed.userId === currentUserId
+    ) {
+      return parsed.secret;
+    }
+  } catch {
+    // Ignore legacy or malformed storage values and replace them on next write.
+  }
+
+  return null;
+};
+
 export const ApiKeysPage = () => {
   const apiKeysQuery = useApiKeysQuery();
   const createApiKeyMutation = useCreateApiKeyMutation();
   const revokeApiKeyMutation = useRevokeApiKeyMutation();
-  const [latestSecret, setLatestSecret] = useState<string | null>(() => {
-    if (typeof window === "undefined") return null;
-    return window.sessionStorage.getItem(latestApiKeySecretStorageKey);
-  });
+  const sessionQuery = useSessionQuery();
+  const currentUserId = sessionQuery.data?.user.id;
+  const [latestSecret, setLatestSecret] = useState<string | null>(null);
+
+  useEffect(() => {
+    setLatestSecret(readStoredLatestSecret(currentUserId));
+  }, [currentUserId]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    if (latestSecret) {
-      window.sessionStorage.setItem(latestApiKeySecretStorageKey, latestSecret);
+    if (latestSecret && currentUserId) {
+      window.sessionStorage.setItem(
+        latestApiKeySecretStorageKey,
+        JSON.stringify({ userId: currentUserId, secret: latestSecret }),
+      );
       return;
     }
 
     window.sessionStorage.removeItem(latestApiKeySecretStorageKey);
-  }, [latestSecret]);
+  }, [currentUserId, latestSecret]);
 
   return (
     <ApiKeysPageView
