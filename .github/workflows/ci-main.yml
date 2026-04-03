@@ -1,22 +1,13 @@
-name: CI PR
+name: CI Main
 
 on:
   push:
     branches:
-      - th/**
-  pull_request:
-    branches:
       - main
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - ready_for_review
-      - edited
 
 concurrency:
-  group: ci-pr-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  group: ci-main-main
+  cancel-in-progress: false
 
 permissions:
   contents: read
@@ -202,3 +193,57 @@ jobs:
 
       - name: Run Playwright smoke
         run: bun run test:e2e
+
+  release-snapshot:
+    name: Release Snapshot
+    runs-on: ubuntu-latest
+    needs:
+      - lint-and-format
+      - typecheck
+      - unit-tests
+      - storybook-build
+      - worker-build
+      - web-build
+      - playwright-smoke
+    permissions:
+      actions: read
+      contents: write
+      issues: read
+      pull-requests: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git identity for release notes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Ensure immutable release snapshot
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 .github/scripts/release_snapshot.py ensure \
+            --target-sha "${GITHUB_SHA}" \
+            --github-repository "${GITHUB_REPOSITORY}" \
+            --github-token "${GITHUB_TOKEN}" \
+            --notes-ref "refs/notes/release-snapshots" \
+            --output "${RUNNER_TEMP}/release-snapshot.json"
+
+      - name: Show release snapshot summary
+        env:
+          SNAPSHOT_PATH: ${{ runner.temp }}/release-snapshot.json
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          payload = json.loads(Path(os.environ["SNAPSHOT_PATH"]).read_text())
+          print("release_enabled=", payload["release_enabled"])
+          print("target_sha=", payload["target_sha"])
+          print("release_tag=", payload.get("release_tag", ""))
+          print("pr_number=", payload.get("pr_number", ""))
+          PY

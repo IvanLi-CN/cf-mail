@@ -13,3 +13,4 @@ apps/web/playwright/.cache
 apps/api-worker/.wrangler
 screenshots
 .artifacts
+__pycache__

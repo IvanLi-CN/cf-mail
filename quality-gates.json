@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "required_checks": [
+    "Validate PR labels",
     "Lint & Format Check",
     "Typecheck",
     "Unit Tests",
@@ -9,5 +10,5 @@
     "Web Build",
     "Playwright Smoke"
   ],
-  "informational_checks": ["Deploy Worker", "Deploy Pages"]
+  "informational_checks": ["Release Snapshot", "Deploy Worker", "Deploy Pages"]
 }
