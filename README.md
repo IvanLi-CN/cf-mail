@@ -11,7 +11,7 @@ Cloudflare temporary email platform built with Email Routing, Workers, D1, R2, a
 - Message list filtering by multiple mailbox addresses
 - Message detail view with headers, text/html bodies, recipients, attachments, and raw `.eml` download
 - React + shadcn/ui control plane for mailboxes, messages, API keys, and users
-- GitHub Actions for CI, Worker deploy, Pages deploy, and tag-based releases
+- GitHub Actions for PR/main CI, Worker deploy, Pages deploy, and PR-label-driven releases
 
 ## Stack
 
@@ -144,9 +144,41 @@ bun run --cwd apps/api-worker db:migrate:remote
 
 ## GitHub Actions
 
-- `ci-pr.yml`: Biome, typecheck, unit tests, build, Storybook build, Playwright smoke
+- `label-gate.yml`: validates that PRs targeting `main` carry exactly one `type:*` label and one `channel:*` label
+- `ci-pr.yml`: PR/feature-branch quality gates for lint, typecheck, tests, builds, Storybook, and Playwright smoke
+- `ci-main.yml`: main-branch quality gates plus immutable release snapshot generation in `refs/notes/release-snapshots`
 - `deploy-main.yml`: D1 migrations, Worker deploy, Pages direct upload on `main`
-- `release.yml`: GitHub Release on `v*` tags
+- `release.yml`: queued GitHub Release publishing driven by merged PR labels and CI Main snapshots
+
+### Release labels
+
+Every PR merged into `main` must carry exactly one label from each group:
+
+- release intent: `type:patch`, `type:minor`, `type:major`, `type:docs`, or `type:skip`
+- release channel: `channel:stable` or `channel:rc`
+
+Release behavior is fixed:
+
+- `type:patch|minor|major + channel:stable`: create a stable tag like `v0.2.0`
+- `type:patch|minor|major + channel:rc`: create a prerelease tag like `v0.2.0-rc.<sha7>`
+- `type:docs` or `type:skip`: record a release snapshot only, without creating a tag, GitHub Release, or PR comment
+
+The first release baseline comes from the root `package.json` version when no stable tags exist yet. After that, the highest merged stable tag becomes the next bump baseline.
+
+### Release snapshots and comments
+
+- `ci-main.yml` writes an immutable release snapshot to git notes at `refs/notes/release-snapshots`
+- `release.yml` publishes the oldest pending releasable snapshot on the first-parent `main` history, so consecutive merges are released in order
+- after a GitHub Release is created, the workflow upserts a marker-based comment back onto the source PR
+- all GitHub API operations use the default `secrets.GITHUB_TOKEN`; no extra PAT or custom GitHub credential is required
+
+### Manual backfill
+
+If a `main` commit already passed `CI Main`, you can backfill the release workflow manually:
+
+```bash
+Actions -> Release -> Run workflow -> commit_sha=<main commit sha>
+```
 
 To use the deploy workflow, configure:
 
