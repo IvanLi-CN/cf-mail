@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { RootLayout } from "@/app/root-layout";
+import { ApiKeysDocsPage } from "@/pages/api-keys-docs-page";
 import { ApiKeysPage } from "@/pages/api-keys-page";
 import { LoginPage } from "@/pages/login-page";
 import { MailboxDetailPage } from "@/pages/mailbox-detail-page";
@@ -24,6 +25,7 @@ export const router = createBrowserRouter([
       { path: "mailboxes/:mailboxId", element: <MailboxDetailPage /> },
       { path: "messages/:messageId", element: <MessageDetailPage /> },
       { path: "api-keys", element: <ApiKeysPage /> },
+      { path: "api-keys/docs", element: <ApiKeysDocsPage /> },
       { path: "users", element: <UsersPage /> },
     ],
   },

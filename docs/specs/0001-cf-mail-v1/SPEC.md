@@ -28,7 +28,9 @@ Deliver a Cloudflare-based temporary mailbox control plane with a compact, tool-
 
 ### Security
 - `/api-keys`
+- `/api-keys/docs`
 - Create and revoke API keys for automation and browser sign-in
+- Protected integration reference for human operators and Agents, covering session exchange, API key lifecycle, mailbox endpoints, and message endpoints
 
 ### Users
 - `/users`
@@ -78,3 +80,11 @@ Evidence is persisted with this spec and refreshed whenever the rendered control
 ### Mailbox Detail
 
 ![Mailbox detail page](./assets/mailbox-detail.png)
+
+### API Key Management
+
+![API keys page with integration docs entry](./assets/api-keys-page-docs-entry.png)
+
+### Integration Reference
+
+![API integration reference page](./assets/api-keys-docs-page.png)

@@ -39,7 +39,7 @@ const navItems = [
     to: "/api-keys",
     label: "API Keys",
     icon: KeyRound,
-    activePatterns: ["/api-keys"],
+    activePatterns: ["/api-keys", "/api-keys/docs"],
   },
   {
     to: "/users",
