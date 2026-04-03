@@ -28,7 +28,7 @@ const createMailboxSchema = z.object({
     .regex(mailboxSubdomainRegex, "支持多级子域，例如 team 或 inbox.team")
     .optional()
     .or(z.literal("")),
-  rootDomain: z.string().min(1, "请选择邮箱域名"),
+  rootDomain: z.string().optional().or(z.literal("")),
   expiresInMinutes: z
     .number()
     .int()
@@ -47,22 +47,24 @@ const pickRandomDomain = (domains: string[]) => {
 export const MailboxCreateCard = ({
   onSubmit,
   isPending,
-  domains,
+  domains = [],
   defaultTtlMinutes,
   maxTtlMinutes,
   isMetaLoading = false,
+  metaError = null,
 }: {
   onSubmit: (values: {
     localPart?: string;
     subdomain?: string;
-    rootDomain: string;
+    rootDomain?: string;
     expiresInMinutes: number;
   }) => Promise<void> | void;
   isPending?: boolean;
-  domains: string[];
+  domains?: string[];
   defaultTtlMinutes: number;
   maxTtlMinutes: number;
   isMetaLoading?: boolean;
+  metaError?: string | null;
 }) => {
   const form = useForm<CreateMailboxValues>({
     resolver: zodResolver(createMailboxSchema),
@@ -109,16 +111,30 @@ export const MailboxCreateCard = ({
       <CardHeader>
         <CardTitle>创建邮箱</CardTitle>
         <CardDescription>
-          {isMetaLoading
-            ? "正在读取邮箱规则与默认 TTL…"
-            : "随机或指定用户名 / 子域。支持多级子域，例如"}
-          <span className="ml-1 font-medium text-foreground">alpha</span>或
-          <span className="ml-1 font-medium text-foreground">ops.alpha</span>
-          。邮箱域名会从可用列表中随机预选，也可以手动切换，地址格式为
-          <span className="ml-1 font-medium text-foreground">
-            nightly@ops.alpha.{selectedExampleRootDomain}
-          </span>
-          ，默认 {defaultTtlMinutes} 分钟后自动回收，最长 {maxTtlMinutes} 分钟。
+          {metaError ? (
+            <span className="text-destructive">
+              邮箱规则加载失败：{metaError}
+              。仍可继续创建邮箱，但地址示例将暂时隐藏。
+            </span>
+          ) : isMetaLoading ? (
+            "正在读取邮箱规则与默认 TTL…"
+          ) : (
+            "随机或指定用户名 / 子域。支持多级子域，例如"
+          )}
+          {!metaError ? (
+            <>
+              <span className="ml-1 font-medium text-foreground">alpha</span>或
+              <span className="ml-1 font-medium text-foreground">
+                ops.alpha
+              </span>
+              。邮箱域名会从可用列表中随机预选，也可以手动切换，地址格式为
+              <span className="ml-1 font-medium text-foreground">
+                nightly@ops.alpha.{selectedExampleRootDomain}
+              </span>
+              ，默认 {defaultTtlMinutes} 分钟后自动回收，最长 {maxTtlMinutes}{" "}
+              分钟。
+            </>
+          ) : null}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -128,12 +144,18 @@ export const MailboxCreateCard = ({
             onSubmit({
               localPart: values.localPart || undefined,
               subdomain: values.subdomain || undefined,
-              rootDomain: values.rootDomain,
+              rootDomain: values.rootDomain || undefined,
               expiresInMinutes: values.expiresInMinutes,
             }),
           )}
         >
-          <div className="grid gap-4 md:grid-cols-3">
+          <div
+            className={
+              domains.length > 0
+                ? "grid gap-4 md:grid-cols-3"
+                : "grid gap-4 md:grid-cols-2"
+            }
+          >
             <div className="space-y-2">
               <Label htmlFor="localPart">用户名</Label>
               <Input
@@ -150,20 +172,22 @@ export const MailboxCreateCard = ({
                 {...form.register("subdomain")}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="rootDomain">邮箱域名</Label>
-              <select
-                id="rootDomain"
-                className="flex h-10 w-full rounded-lg border border-input bg-muted/40 px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-                {...form.register("rootDomain")}
-              >
-                {domains.map((domain) => (
-                  <option key={domain} value={domain}>
-                    {domain}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {domains.length > 0 ? (
+              <div className="space-y-2">
+                <Label htmlFor="rootDomain">邮箱域名</Label>
+                <select
+                  id="rootDomain"
+                  className="flex h-10 w-full rounded-lg border border-input bg-muted/40 px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  {...form.register("rootDomain")}
+                >
+                  {domains.map((domain) => (
+                    <option key={domain} value={domain}>
+                      {domain}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : null}
           </div>
           <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
             <div className="space-y-2">
@@ -179,14 +203,14 @@ export const MailboxCreateCard = ({
             <Button
               className="w-full md:w-auto"
               type="submit"
-              disabled={isPending || isMetaLoading || domains.length === 0}
+              disabled={isPending || isMetaLoading}
             >
-              {isMetaLoading
-                ? "读取规则中…"
-                : isPending
-                  ? "创建中…"
-                  : domains.length === 0
-                    ? "暂无可用域名"
+              {metaError
+                ? "创建邮箱"
+                : isMetaLoading
+                  ? "读取规则中…"
+                  : isPending
+                    ? "创建中…"
                     : "创建邮箱"}
             </Button>
           </div>
