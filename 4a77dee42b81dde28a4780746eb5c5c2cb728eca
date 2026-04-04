@@ -1,0 +1,21 @@
+{
+  "app_effective_version": "0.6.0",
+  "base_stable_version": "0.5.1",
+  "channel_label": "channel:stable",
+  "created_at": "2026-04-04T06:13:48Z",
+  "next_stable_version": "0.6.0",
+  "notes_ref": "refs/notes/release-snapshots",
+  "pr_head_sha": "4bb009ad18ef0d0307982d62fde357699507e59b",
+  "pr_number": 10,
+  "pr_title": "feat: add smart message refresh for mail workspace",
+  "release_bump": "minor",
+  "release_channel": "stable",
+  "release_enabled": true,
+  "release_prerelease": false,
+  "release_tag": "v0.6.0",
+  "schema_version": 1,
+  "snapshot_source": "ci-main",
+  "tags_csv": "v0.6.0",
+  "target_sha": "4a77dee42b81dde28a4780746eb5c5c2cb728eca",
+  "type_label": "type:minor"
+}
