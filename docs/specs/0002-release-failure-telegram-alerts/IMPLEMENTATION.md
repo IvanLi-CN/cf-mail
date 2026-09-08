@@ -6,5 +6,6 @@
 - ADR 0002 records the Oidrune OIDC notification boundary, caller-owned metadata, and immutable workflow pin.
 - Caller jobs grant `id-token: write`, omit gateway overrides, and no longer forward `SHOUTRRR_URL` or any legacy Telegram inputs.
 - The caller builds complete failure/smoke summaries with project, result metadata, target SHA, run URL, title, workflow, event, attempt, actor, ref, and details.
+- Release publication retains tag creation, GitHub Release creation, deploy dispatch, and release queue handling without writing a post-publication result comment to the source PR; the release-owning agent reports successful publication to the owner.
 - `.github/scripts/test-notify-release-failure-workflow.sh` covers the workflow contract and runs in both PR and main CI lint jobs.
 - Local validation includes the workflow contract test, `actionlint`, Spec contract validation, Spec drift validation, repository checks, type checking, unit tests, and builds. No real `workflow_dispatch` smoke notification is sent.

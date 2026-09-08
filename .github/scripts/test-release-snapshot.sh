@@ -145,38 +145,9 @@ with tempfile.TemporaryDirectory() as tmp:
                 self.end_headers()
                 self.wfile.write(json.dumps({"tag_name": "v0.2.0"}).encode())
                 return
-            if self.path == "/repos/IvanLi-CN/KaisouMail/issues/10/comments?per_page=100":
-                self.send_response(200)
-                self.end_headers()
-                self.wfile.write(
-                    json.dumps(
-                        [
-                            {
-                                "body": "<!-- kaisoumail-release-version-comment -->",
-                                "user": {"type": "Bot", "login": "github-actions[bot]"},
-                            }
-                        ]
-                    ).encode()
-                )
-                return
             if self.path == "/repos/IvanLi-CN/KaisouMail/releases/tags/v0.2.1":
-                self.send_response(200)
+                self.send_response(404)
                 self.end_headers()
-                self.wfile.write(json.dumps({"tag_name": "v0.2.1"}).encode())
-                return
-            if self.path == "/repos/IvanLi-CN/KaisouMail/issues/11/comments?per_page=100":
-                self.send_response(200)
-                self.end_headers()
-                self.wfile.write(
-                    json.dumps(
-                        [
-                            {
-                                "body": "<!-- kaisoumail-release-version-comment -->",
-                                "user": {"type": "User", "login": "someone"},
-                            }
-                        ]
-                    ).encode()
-                )
                 return
             self.send_response(404)
             self.end_headers()

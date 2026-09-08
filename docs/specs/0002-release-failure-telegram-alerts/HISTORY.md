@@ -6,3 +6,7 @@
 - Replaced secret-based Telegram forwarding with caller-owned OIDC summaries and `id-token: write` permissions, while retaining the existing Release filters, failure gating, manual smoke path, and target-SHA log resolution.
 - Recorded the Oidrune OIDC notification boundary and immutable workflow pin in ADR 0002.
 - Added workflow contract coverage to PR and main CI.
+
+## 2026-09-08
+
+- Removed the Release workflow's post-publication source-PR result comment and its dedicated write permissions; release snapshots now treat the GitHub Release as the completion predicate.
