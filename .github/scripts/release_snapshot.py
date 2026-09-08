@@ -27,7 +27,6 @@ ALLOWED_TYPE_LABELS = {
 }
 ALLOWED_CHANNEL_LABELS = {"channel:stable", "channel:rc"}
 STABLE_TAG_RE = re.compile(r"^v(\d+)\.(\d+)\.(\d+)$")
-RELEASE_COMMENT_MARKER = "<!-- kaisoumail-release-version-comment -->"
 LINK_NEXT_RE = re.compile(r'<([^>]+)>;\s*rel="next"')
 
 
@@ -403,41 +402,13 @@ def github_release_exists(api_root: str, repository: str, token: str, release_ta
     return isinstance(payload, dict)
 
 
-def github_pr_has_release_comment(api_root: str, repository: str, token: str, pr_number: int) -> bool:
-    owner, repo = repository.split("/", 1)
-    comments = github_request_paginated(
-        api_root,
-        token,
-        f"/repos/{owner}/{repo}/issues/{pr_number}/comments?per_page=100",
-    )
-    for comment in comments:
-        if not isinstance(comment, dict):
-            continue
-        body = comment.get("body")
-        user = comment.get("user")
-        if (
-            isinstance(body, str)
-            and RELEASE_COMMENT_MARKER in body
-            and isinstance(user, dict)
-            and user.get("type") == "Bot"
-            and user.get("login") == "github-actions[bot]"
-        ):
-            return True
-    return False
-
-
 def release_side_effects_completed(snapshot: dict[str, Any], *, api_root: str, repository: str, token: str) -> bool:
     if not snapshot.get("release_enabled"):
         return True
     release_tag = snapshot.get("release_tag")
-    pr_number = snapshot.get("pr_number")
     if not isinstance(release_tag, str) or not release_tag:
         return False
-    if not github_release_exists(api_root, repository, token, release_tag):
-        return False
-    if not isinstance(pr_number, int) or pr_number <= 0:
-        return False
-    return github_pr_has_release_comment(api_root, repository, token, pr_number)
+    return github_release_exists(api_root, repository, token, release_tag)
 
 
 def first_parent_commits(target_sha: str) -> list[str]:
